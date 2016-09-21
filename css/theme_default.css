@@ -1,0 +1,93 @@
+		
+		
+	@media all and (max-width: 340px) {
+
+		#con_box{height:350px;}
+		#data_list_msg{height:210px;}
+		#data_contacts_box{height:250px}
+		.server_ok{font-size:13px}
+	}	
+	
+	@media all and (min-width: 340px) and (max-width: 600px) {
+	
+		#con_box{height:400px;}
+		#data_list_msg{height:260px;}
+		#data_contacts_box{height:300px}
+		.server_ok{font-size:13px}
+	}
+	
+	@media all and (min-width: 600px)  {
+	
+		#con_box{height:500px;}
+		#data_list_msg{height:360px;}
+		#data_contacts_box{height:400px}
+		.server_ok{font-size:15px}
+	
+	}	
+	
+	.server_ok{background-color:#F0FFFF; color:#00BFFF; border:1px solid #00BFFF; padding:5px}
+	
+	#s_user_block_link{color:#c0c0c0}
+	#data_settings_status{color:#ff0000}
+		
+	.log{border:1px solid #808080; padding:2px; margin:2px}
+	.abs_msg_box{border:1px solid #ff0000;}
+	.abs_msg_con{border:1px solid #c0c0c0;  padding:2px 10px 2px 10px; height:100%; overflow-y: auto; }
+	
+	.online{color:#40E527}
+	.offline{color:#c0c0c0}
+	
+	.preloader_friend{width:64px; height:64px; background: url(../img/preloader.gif) repeat-y;}
+	.msg_clss_in{border:1px solid #20B2AA; border-radius:5px; padding:5px 20px 20px 15px; background-color: #A3FFCF; position:relative; margin-top:6px; display:inline-block; max-width: 220px; min-width: 40px}
+	.msg_clss_in_l{border:1px solid #CDB79E; border-radius:5px; padding:5px 20px 20px 15px; background-color: #FFEFDB; position:relative; margin-top:6px; display:inline-block; max-width: 220px; min-width: 40px}
+	.msg_clss_from_system{border:1px solid #808080; border-radius:5px; padding:5px 15px 20px 15px; background-color: #20B2AA; position:relative; margin-top:6px; display:inline-block; max-width: 220px; min-width: 40px}
+	
+	.fa-smile-o{color:#0000ff}
+	.user_setter_name{position:absolute; width:200px; height:25px; border:0px solid red; left:0px; top:-5px; padding-top: 5; cursor:default}
+	.user_msg_count{width:20px; color:#000}
+	.user_setter{position:relative; }
+	
+	.a_clss{color:#0000ff}
+	
+	#user_name_box{cursor:pointer; color:#fff; font-weight:bolder; padding-right:10px}
+	.new_not_friend{font-weight:bolder; color:#ff0000}
+	
+	#crypto_line_state{padding-right:10px}
+	
+		#body{background-color:#fff}
+		#login_box{border:3px solid #20B2AA; border-radius:100%; display:none; width:312px; height:260px; padding-top:60px; margin-top:10px; box-shadow: 0 0 20px rgba(0,0,0,0.5);}
+		#new_box{border:3px solid #20B2AA; border-radius:100%; display:none; width:312px; height:260px; padding-top:60px; margin-top:10px; box-shadow: 0 0 20px rgba(0,0,0,0.5);}
+		.btn{border:2px solid #20B2AA; background-color:#40E0D0; cursor:pointer; width:100px; padding: 2px 10px 2px 10px; display:inline-block; border-radius:5px; text-align:center; font-weight:bolder}
+		.btn:hover{background-color:#00FF7F; }		
+		
+		#div_search{padding:5px;  border:1px solid #fff; border-radius:5px; margin-top:3px}
+		#div_con_search{ padding:5px;  border:1px solid #fff; border-radius:5px; margin-top:3px}
+		#data_search{width:315px; padding:2px 0px 2px 0px;   }
+		#user_search{}
+		#log_box{display:block}
+		
+		.user_el{padding:5px;  border:1px solid #fff; background-color:#40E0D0; border-radius:5px; margin:2px 0px 2px 0px}
+		.user_not_friend_el{padding:5px;  border:1px solid #fff; background-color:#E2E2E2; border-radius:5px; margin:2px 0px 2px 0px}
+		.fa-user-plus{cursor:pointer}
+		.fa-user-times{cursor:pointer}
+		.fa-search{color:#40E0D0}
+
+			body, html {padding:0px; margin:0px}
+		
+			#box_box{width:320px; display:none}
+		
+			#menu_box{width:100%; height:30px; background-color:#40E0D0}
+			.menu_el{width:80px; cursor:pointer; padding: 5px 10px 2px 10px; text-align:center; height:100%; font-weight:bolder}
+			.menu_a_el{color:#668B8B; text-decoration:none; width:80px; cursor:pointer; padding: 5px 10px 2px 10px; text-align:center; height:100%; font-weight:bolder}
+			.menu_a_el:hover{color:#000}
+			
+			#data_msg_box{width:312px; height:100%; display:block; padding: 0px 4px 0px 4px; background-color:#fff}			
+			#data_contacts_box{width:312px; display:block; padding: 5px 3px 0px 3px; background-color:#fff; overflow-y: auto;}
+			
+			#data_con_search_box{ display:block; padding: 2px 6px 0px 4px; background-color:#fff}
+			#data_search_box{ height:100%; display:block; padding: 2px 6px 0px 1px; background-color:#fff}
+			#data_settings_box{ height:100%; display:block; padding: 2px 6px 0px 1px; background-color:#fff}
+			
+	
+			#con_box{width:318px; overflow:hidden;   border:1px solid #40E0D0}
+			#con_abs_box{position:absolute; top:0px; bottom:0px; height:100%; border:0px solid red; left:-320px; z-index:1}		

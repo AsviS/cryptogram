@@ -1,0 +1,181 @@
+<?php
+
+class class_my_sql {
+   var $my_sql_login="LOGIN";
+   var $my_sql_passwd="PASSWORD";
+   var $my_sql_database="DATABASE";
+
+   var $my_sql_host="localhost";
+   
+
+   var $conn_id;
+   var $my_sql_query;
+   var $my_sql_query_table_exist;
+   var $my_sql_query_field_exist;
+   var $my_sql_err;
+   var $my_sql_err_my;
+   var $my_sql_err_my1;
+   var $my_sql_res;
+   var $my_sql_res_table_exist;
+   var $my_sql_res_field_exist;
+      
+
+function my_sql_connect() {
+
+
+//if($_SERVER['HTTP_HOST'] == "fondovik.com" || $_SERVER['HTTP_HOST'] == "www.fondovik.com")
+    //set_error_handler(array($this, 'err_handler'));
+
+//    error_reporting(0);
+    $SQL=$this->conn_id=mysql_connect($this->my_sql_host,$this->my_sql_login,$this->my_sql_passwd);
+	mysql_select_db($this->my_sql_database, $this->conn_id); 
+//    error_reporting(E_ALL & ~E_NOTICE);
+    mysql_query("SET NAMES cp1251",$this->conn_id);
+
+    if ($this->conn_id) {return true;} else {return false;}
+    }
+
+
+function err_handler($errno, $errmsg, $filename, $linenum) {
+
+    //if (!in_array($errno, Array(E_NOTICE, E_STRICT, E_WARNING))) {
+    
+        
+        
+        $date = date('Y-m-d H:i:s (T)');
+    
+		$E_NOTICE = true;
+		$E_WARNING = true;
+
+
+        switch ($errno) {
+			case E_NOTICE:
+			
+				if($E_NOTICE)
+				{
+				
+					$f = fopen($_SERVER['DOCUMENT_ROOT'] . '/logs/E_NOTICE.log', 'a');
+					if (!empty($f)) {
+					
+						$err  = "<error>\r\n";
+						$err .= "  <date>$date</date>\r\n";
+						$err .= "  <errno>$errno</errno>\r\n";
+						$err .= "  <errmsg>$errmsg</errmsg>\r\n";
+						$err .= "  <filename>$filename</filename>\r\n";
+						$err .= "  <linenum>$linenum</linenum>\r\n";
+						$err .= "</error>\r\n";
+						
+					  
+						fwrite($f, $err);
+						fclose($f);
+						
+					}		
+				}
+					
+			break;
+			
+			case E_WARNING:
+			
+				if($E_WARNING)
+				{
+					$f = fopen($_SERVER['DOCUMENT_ROOT'] . '/logs/E_WARNING.log', 'a');
+					if (!empty($f)) {
+					
+						$err  = "<error>\r\n";
+						$err .= "  <date>$date</date>\r\n";
+						$err .= "  <errno>$errno</errno>\r\n";
+						$err .= "  <errmsg>$errmsg</errmsg>\r\n";
+						$err .= "  <filename>$filename</filename>\r\n";
+						$err .= "  <linenum>$linenum</linenum>\r\n";
+						$err .= "</error>\r\n";
+						
+					  
+						fwrite($f, $err);
+						fclose($f);
+						
+					}					
+				}
+				
+			
+			break;			
+			
+			default:
+			
+				$f = fopen($_SERVER['DOCUMENT_ROOT'] . '/logs/index.log', 'a');
+				if (!empty($f)) {
+				
+					$err  = "<error>\r\n";
+					$err .= "  <date>$date</date>\r\n";
+					$err .= "  <errno>$errno</errno>\r\n";
+					$err .= "  <errmsg>$errmsg</errmsg>\r\n";
+					$err .= "  <filename>$filename</filename>\r\n";
+					$err .= "  <linenum>$linenum</linenum>\r\n";
+					$err .= "</error>\r\n";
+					
+				  
+					fwrite($f, $err);
+					fclose($f);
+					
+				}
+				break;			
+			
+			}
+        
+
+        
+    //}
+
+}
+
+function getErrors()
+{
+	return $this->my_sql_err;
+}
+
+function my_sql_execute() { 
+    $this->my_sql_res=mysql_query($this->my_sql_query,$this->conn_id);
+    $this->my_sql_err=mysql_error(); 
+    }
+	
+function my_sql_insert_id()
+{
+	$execute = $this->my_sql_res = mysql_insert_id($this->conn_id);
+
+	return $execute;
+}	
+
+function my_sql_execute_table_exist($table_name) { 
+		$this->my_sql_res_table_exist=mysql_query("SELECT 1 FROM ".mysql_real_escape_string($table_name)." WHERE 0",$this->conn_id);
+		$this->my_sql_err_my=mysql_error(); 
+
+		if($this->my_sql_res_table_exist)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}//end else
+    }
+function my_sql_execute_field_exist($table_name,$field_name) { 
+		$this->my_sql_res_field_exist=mysql_query("SELECT ".mysql_real_escape_string($field_name)." FROM ".mysql_real_escape_string($table_name)." WHERE 0",$this->conn_id);
+		$this->my_sql_err_my1=mysql_error(); 
+
+		if($this->my_sql_res_field_exist)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}//end else
+    }
+
+function my_sql_close() {
+	mysql_close($this->conn_id);
+    }
+
+
+
+}
+  ?>
