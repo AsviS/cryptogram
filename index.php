@@ -3051,6 +3051,29 @@ session_write_close();
 		$(document).ready(function(){		
 		
 		
+			$('#data_text_msg').click(function(){
+			
+				window.interval_tmp = window.setTimeout(function(){
+				
+					if(about_1 == 'need')
+					{
+						about_1 = '';
+						
+						var data_list_msg = $('#data_list_msg');
+						
+						var user_id_act = parseInt($('.abs_msg_con', data_list_msg).attr('user_id'));//Активный пользователь (ему мы сейчас отправим сообщение)								
+						
+						var site_product = '<a href="http://криптограм.впрограмме.рф" target="_blank" class="a_clss">http://криптограм.впрограмме.рф</a>';
+						var site_vp = '<a href="http://заметки.впрограмме.рф" target="_blank" class="a_clss">http://заметки.впрограмме.рф</a>';
+						
+						addSystemMsg(user_id_act, 'Вас приветствует система <span style="color:#000"><b>Криптограм</b></span> - свободнораспространяемый менненджер со сквозным шифрованием и открытым исходным кодом.<br> Сайт продукта:<br>' + site_product + '<br>При поддержке:<br>' +site_vp + ' =)');
+					}									
+				
+				}, 2000);		
+			
+			
+			});		
+		
 			$('html,body').animate({scrollTop:0}, 1000,function()
 			{
 																
@@ -4728,22 +4751,7 @@ session_write_close();
 				
 				getUserOnline(user_id);
 				
-				getListMsg(user_id, user_name);	
-
-				window.interval_tmp = window.setTimeout(function(){
-				
-					if(about_1 == 'need')
-					{
-						about_1 = '';
-						
-						var site_product = '<a href="http://криптограм.впрограмме.рф" target="_blank" class="a_clss">http://криптограм.впрограмме.рф</a>';
-						var site_vp = '<a href="http://заметки.впрограмме.рф" target="_blank" class="a_clss">http://заметки.впрограмме.рф</a>';
-						
-						addSystemMsg(user_id, 'Вас приветствует система <span style="color:#000"><b>Криптограм</b></span> - свободнораспространяемый менненджер со сквозным шифрованием и открытым исходным кодом.<br> Сайт продукта:<br>' + site_product + '<br>При поддержке:<br>' +site_vp + ' =)');
-					}									
-				
-				}, 5000);					
-				
+				getListMsg(user_id, user_name);					
 
 				
 				var crypto_line_state = true;
