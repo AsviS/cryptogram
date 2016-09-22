@@ -62,7 +62,7 @@ session_write_close();
 		
 		//Инструменты
 		
-		var debag_on = false; //Дебаг
+		var debag_on = true; //Дебаг
 		
 		var log_display = debag_on;//Включает/отключает лог операций для дебага
 		var demon_init = true;//Временное отключение демонов (для дебага верстки и т.п. что б не мешали постоянные TimeIntervalы)
@@ -427,7 +427,7 @@ session_write_close();
 								{
 									var decrypted = CryptoJS.AES.decrypt(atoms_mas[a]['body'], key_p, {iv: iv});	
 									
-									decrypted = decrypted.toString(CryptoJS.enc.Utf8);
+									decrypted = UtfCorrect(decrypted.toString(CryptoJS.enc.Utf8));									
 									
 									//con += atoms_mas[a]['body'] + '/' + decrypted + '/' + key_p + '/' + iv;
 									
@@ -885,9 +885,7 @@ session_write_close();
 										
 										
 									log('_type=' + _type);//loger...										
-									log('_user_from_id=' + _user_from_id);//loger...									
-
-									
+									log('_user_from_id=' + _user_from_id);//loger...							
 			
 									
 									if(_type == 'atom_0')
@@ -898,14 +896,12 @@ session_write_close();
 										var _msg_packet_key = while_data[w]['msg_packet_key'];
 										var _number_atom = while_data[w]['number_atom'];
 										var _body = while_data[w]['body'];
-										var session_user_id = while_data[w]['msg_packet_key'];
-										
+																				
 										log('_crypto_line=' + _crypto_line);//loger...
 										log('_msg_packet_key=' + _msg_packet_key);//loger...	
 										log('_number_atom=' + _number_atom);//loger...	
 										log('_body=' + _body);//loger...	
-										log('session_user_id=' + session_user_id);//loger...	
-										
+																				
 										var data_list_msg = msgs_mas[_user_from_id + '']['data_list_msg'];
 										
 										var count_data_list_msg = data_list_msg.length;
@@ -914,38 +910,42 @@ session_write_close();
 										{
 											if(data_list_msg[m]['msg_packet_key'] == _msg_packet_key)
 											{
-												log('msg_packet_key_OK ');//loger...	
+												log('msg_packet_key_OK_ ');//loger...	
 											
 												//
 												
 												var count_atoms = parseInt(data_list_msg[m]['count_atoms']);
 												
-												log('count_atoms=' + count_atoms);//loger...
+												log('count_atoms =' + count_atoms);//loger...
 												
 												if(count_atoms == 1)
 												{
 													//Из метаинформации по сообщению известно, что атом у него один - значит мы получили все
 													//Дешифруем тело атом, отразим текст и отправим на сервер статус сообщения тип что оно прочитано
 													
-													var sync_key = data_list_msg[m]['decrypt_sync_key_data'];
+													var sync_key = data_list_msg[m]['decrypt_sync_key_data'];												
 													
-													//log('sync_key=' + sync_key);//loger...
 													
 													_body = decodeURIComponent(_body);						
 													_body = _body.replaceAll('&quot;', '"');	
 													_body = _body.replaceAll('@@p@@', '+');//Символ + отдельно кодируем ибо пхп-ная urldecode раскодирует + как пробел		
 													_body = _body.replaceAll('@@pr@@', ' ');//Символ + отдельно кодируем ибо пхп-ная urldecode раскодирует + как пробел														
 													
-													//log('_body=' + _body);//loger...	
+													log('_body=' + _body);//loger...	
 													
-													sync_key = sync_key.toString();		
+													sync_key = sync_key.toString();	
+
+													log('sync_key=' + sync_key);//loger...	
+													log('_msg_packet_key=' + _msg_packet_key);//loger...	
 													
 													var key_p =  CryptoJS.enc.Hex.parse(sync_key);
-													var iv =  CryptoJS.enc.Hex.parse(session_user_id);													
+													var iv =  CryptoJS.enc.Hex.parse(_msg_packet_key);													
 
 													var decrypted = CryptoJS.AES.decrypt(_body, key_p, {iv: iv});
 													
-													decrypted = decrypted.toString(CryptoJS.enc.Utf8);
+													log('decrypted=' + decrypted);//loger...	
+													
+													decrypted = UtfCorrect(decrypted.toString(CryptoJS.enc.Utf8));	
 													
 													log('decrypted !!!=' + decrypted);//loger...	
 
@@ -1118,6 +1118,8 @@ session_write_close();
 
 										if(_crypto_line == 1)
 										{
+											log('СКВОЗНОЕ ШИФРОВАНИЕ');//loger...
+										
 											var _encrypt_sync_key_data = while_data[w]['encrypt_sync_key_data'].toString();	
 											
 											log('_encrypt_sync_key_data=' + _encrypt_sync_key_data);//loger...		
@@ -1145,12 +1147,13 @@ session_write_close();
 
 												
 									
-											var  decrypt_sync_key_data = crypt.decrypt(_encrypt_sync_key_data);	//.toString()											
+											var decrypt_sync_key_data = crypt.decrypt(_encrypt_sync_key_data);	//.toString()											
 
 
 										}
 										else
 										{	
+											log('ОБЫЧНОЕ ШИФРОВАНИЕ');//loger...
 											var decrypt_sync_key_data = while_data[w]['easysync_key_data'];
 
 										}	
@@ -1256,8 +1259,19 @@ session_write_close();
 		}
 		
 
-														
-														
+		function preCorrect(str)
+		{
+			str = str.replaceAll('г', '@@g@@');	
+		
+			return str;
+		}	
+
+		function UtfCorrect(str)
+		{
+			str = str.replaceAll('@@g@@', 'г');	
+		
+			return str;
+		}			
 		
 		function sendAtomEasy(sendDate)
 		{
@@ -1294,42 +1308,52 @@ session_write_close();
 			if(crypto_line)
 			{
 				//Отправляем сквозным шифрованием
+				log('Отправляем сквозным шифрованием');//loger...
 				
 				key_s_a_5_for_send_sync = 'key_s_a_5_for_send_sync';
 			}
 			else
 			{
 				//Отправляем обычным шифрованием
+				log('Отправляем обычным шифрованием');//loger...
+				
 				crypto_line_int = 0;
 				key_s_a_5_for_send_sync = 'easysinc_key';
 			}
+			
+			var packet_key_msg = sendDate['packet_key_msg'];
+			var data_msg = sendDate['data_msg'];
 
-			log('key_s_a_5_for_send_sync=' + sendDate[key_s_a_5_for_send_sync]);//loger...			
-			log('data_msg=' + sendDate['data_msg']);//loger...						
+			log('key_s_a_5_for_send_sync type=' + key_s_a_5_for_send_sync);//loger...	
+			log('key_s_a_5_for_send_sync=' + sendDate[key_s_a_5_for_send_sync]);//loger...	
+			
+			log('data_msg=' + data_msg);//loger...	
 
-			var data_atom_encoding = getEncryptedStr(sendDate['data_msg'], sendDate[key_s_a_5_for_send_sync], sendDate['packet_key_msg']);	//Шифруем данные атома синхронным ключем	
+			var sync_key = sendDate[key_s_a_5_for_send_sync];
+			var iv =  packet_key_msg;
+			
+			log('sync_key encode=' + sync_key);//loger...	
+			log('iv encode=' + iv);//loger...				
+			
+			var data_atom_encoding = getEncryptedStr(data_msg, sync_key, iv);	//Шифруем данные атома синхронным ключем	
 			
 			log('data_atom_encoding=' + data_atom_encoding);//loger...		
 			
-			//===============================
-			//===============================
-			
-			
-			log('TEST_3_START');//loger...		
-			
 			var sync_key = CryptoJS.enc.Hex.parse(sendDate[key_s_a_5_for_send_sync]);
+			var iv =  CryptoJS.enc.Hex.parse(packet_key_msg);
 			
-			if(crypto_line)	
-				var iv =  CryptoJS.enc.Hex.parse(sid);
-			else
-				var iv =  CryptoJS.enc.Hex.parse(sendDate['packet_key_msg']);
+			log('sync_key decode=' + sync_key);//loger...	
+			log('iv decode=' + iv);//loger...				
 			
+			//===============================
+			//===============================			
+			
+			log('TEST_3_START Расшифруем для проверки');//loger...						
 			
 			//var getData_mas = jQuery.parseJSON(msg);	
 		//	var encrypted_data = getData_mas['encrypted_data'];	
 		
-			log('data_atom_encoding_1=' + data_atom_encoding);//loger...	
-		
+			log('data_atom_encoding_1=' + data_atom_encoding);//loger...		
 			
 			data_atom_encoding = decodeURIComponent(data_atom_encoding);						
 			data_atom_encoding = data_atom_encoding.replaceAll('&quot;', '"');	
@@ -1342,15 +1366,20 @@ session_write_close();
 					
 			log('decrypted=' + decrypted);//loger...		
 			
-			decrypted = decrypted.toString(CryptoJS.enc.Utf8);
+			decrypted = UtfCorrect(decrypted.toString(CryptoJS.enc.Utf8));		
 			
 			log('decrypted=' + decrypted);//loger...	
 			
+			if(decrypted != "")
+				log('<div style="background-color:#00ff00; width:100px">&nbsp;</div>');//loger...	
+			else		
+				log('<div style="background-color:#ff0000; width:100px">&nbsp;</div>');//loger...	
+				
 			log('TEST_3_END');//loger...		
 			
 			//===============================
 				
-			var packet_key_msg = sendDate['packet_key_msg'];
+			
 				
 			var send_data = new Object();
 			send_data['sid'] = sid;
@@ -1940,6 +1969,8 @@ session_write_close();
 															//работаем на простом уровне
 															
 															log('Простой загрузчик');//loger...	
+															
+															data_msg = preCorrect(data_msg);
 															
 															var sendDate = new Object();
 															sendDate['to_user'] = to_user;
@@ -3040,7 +3071,7 @@ session_write_close();
 			
 			log('decrypted=' + decrypted);//loger...	
 			
-			decrypted = decrypted.toString(CryptoJS.enc.Utf8);
+			decrypted = UtfCorrect(decrypted.toString(CryptoJS.enc.Utf8));	
 			
 			log('decrypted=' + decrypted);//loger...	
 			
