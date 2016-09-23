@@ -86,6 +86,7 @@ CREATE TABLE `z_users` (
   `time` int(11) NOT NULL,
   `about_1` int(1) NOT NULL,
   `sound_on` int(1) NOT NULL DEFAULT '1',
+  `log_on` int(1) NOT NULL DEFAULT '1',
   `user_block_hash` varchar(32) NOT NULL,
   `block` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
