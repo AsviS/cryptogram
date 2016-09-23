@@ -5320,7 +5320,7 @@ session_write_close();
 		<div id="queue_atoms_box" style="border:1px solid #000; padding:5px; position:absolute; top:-600px; left: -800px; width:500px"></div>
 		<div id="log_box" style="display:none; border:1px solid #808080; padding:5px; position:absolute; top:600px; width:98%; background-color:#fff"></div>
 	
-		<div style="position:absolute; top:0; left:100; display:none;" id="demons_state" _play="1"><span class="btn" >Остановить</span> После перезапуска старт лога будет через минуту</div>
+		<div style="position:absolute; top:0; left:100; display:none;" id="demons_state" _play="1"><span class="btn" >Остановить</span> После перезапуска старт лога будет через минуту<br>Так же логи видны из консоли Javascrupt разработчика.<br> Для работы с этой консолью нажмите Ctrl-Shift + J<br> и перейдите во вкладку Console</div>
 		
 		
 		<video src="sound/add_friend.mp3" onclick="this.play();" id="sound_new_msg_play" style="display:none"></video>
