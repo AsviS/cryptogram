@@ -50,6 +50,8 @@ session_write_close();
 		var time_delta_int = 0;//Дельта с сервером. На сервере возвратили time() - браузер;
 		var about_1 = "";
 		
+		var key_k = 0;
+		
 		var event_user_add = false;
 		var event_new_msg = false;
 		var event_load_msg = false;
@@ -77,6 +79,12 @@ session_write_close();
 			
 		
 		var sid = '<?php echo $sid; ?>';
+		
+		function writer()
+		{
+			
+		
+		}		
 		
 		function soundGo(sound)
 		{
@@ -1709,6 +1717,7 @@ session_write_close();
 		
 		function queueInretval()
 		{			
+			key_k++;
 			
 			if(focus_g == 1)
 			{			
@@ -4788,19 +4797,27 @@ session_write_close();
 			
 			$('#data_text_msg').keydown(function (e) {
 
-			  if (e.ctrlKey && e.keyCode == 13) {
+				var send_go = false;
+
+				if (e.ctrlKey && e.keyCode == 13) {
 				
-				msgSend();
+					send_go = true;
 				
 				
-			  }
+				}
 			  
-			  if (e.keyCode == 13) {
+				if (!e.shiftKey && e.keyCode == 13) {
 				
-				msgSend();
+					send_go = true;
+					
 				
-				
-			  }		
+				}		
+			  
+				if(send_go)
+					msgSend();
+			  
+				writer();
+			
 			  
 			});	
 			
