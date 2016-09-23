@@ -5318,9 +5318,9 @@ session_write_close();
 		<div id="data_list_msg_abs_box" style="position:absolute; top:70; left:230; border:1px solid #808080; width:312px; height:500px; left:-800px"></div>
 		<div id="queue_box" style="border:1px solid #0000ff; padding:5px; position:absolute; top:-500px; left:-800px; width:500px"></div>
 		<div id="queue_atoms_box" style="border:1px solid #000; padding:5px; position:absolute; top:-600px; left: -800px; width:500px"></div>
-		<div id="log_box" style="display:none; border:1px solid #808080; padding:5px; position:absolute; top:600px; width:98%"></div>
+		<div id="log_box" style="display:none; border:1px solid #808080; padding:5px; position:absolute; top:600px; width:98%; background-color:#fff"></div>
 	
-		<span class="btn" id="demons_state" style="position:absolute; top:50; left:100; display:none;" _play="1">Остановить</span>
+		<div style="position:absolute; top:0; left:100; display:none;" id="demons_state" _play="1"><span class="btn" >Остановить</span> После перезапуска старт лога будет через минуту</div>
 		
 		
 		<video src="sound/add_friend.mp3" onclick="this.play();" id="sound_new_msg_play" style="display:none"></video>
