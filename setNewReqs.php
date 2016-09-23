@@ -82,6 +82,7 @@ if($encrypted != "" && $getInitLogin_time_ok)
 			$sid_b = $data_send_mas['sid'];		
 			$packet_key = $data_send_mas['packet_key'];	
 			$sound_ok_val = $data_send_mas['sound_ok_val'];	
+			$log_on_val = $data_send_mas['log_on_val'];	
 			$user_secret_md5 = $data_send_mas['user_secret_md5'];	
 			$user_password_md5 = $data_send_mas['user_password_md5'];	
 			$key_s_a_5 = $data_send_mas['key_s_a_5'];//Этим ключем зашифруем обратку	
@@ -100,7 +101,7 @@ if($encrypted != "" && $getInitLogin_time_ok)
 				
 				}
 			
-				$text->my_sql_query="update z_users set sound_on = '" . mysql_real_escape_string($sound_ok_val) . "' where sid = '" . mysql_real_escape_string($sid) . "'";
+				$text->my_sql_query="update z_users set sound_on = '" . mysql_real_escape_string($sound_ok_val) . "', log_on = '" . mysql_real_escape_string($log_on_val) . "' where sid = '" . mysql_real_escape_string($sid) . "'";
 				$text->my_sql_execute();					
 				
 			

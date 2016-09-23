@@ -1,5 +1,18 @@
 <?php
 
+function getLogByUserId($user_id)
+{
+	global $text;
+	
+	$select = 'select log_on from z_users where id="' . mysql_real_escape_string($user_id) . '"';
+	$text->my_sql_query = $select;
+	$text->my_sql_execute();
+	$res = mysql_fetch_object($text->my_sql_res);
+	return $res->log_on;		
+	
+
+}
+
 function getSoundByUserId($user_id)
 {
 	global $text;

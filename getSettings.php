@@ -88,6 +88,7 @@ if($encrypted != "" && $getInitLogin_time_ok)
 
 				$data_mas['packet_key'] = $packet_key;
 				$data_mas['sound_on'] = getSoundByUserId($user_id);
+				$data_mas['log_on'] = getLogByUserId($user_id);
 				$data_mas['user_block_link'] = getBlockLinkByUserId($user_id);
 				
 				

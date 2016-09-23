@@ -70,7 +70,7 @@ session_write_close();
 		var tools_log = debag_on;//Видимость блока с логами
 		var tools_queue_msg = debag_on;
 		var tools_queue_atom = debag_on;
-		var tools_con_msgs = debag_on;
+		var tools_con_msgs = false;
 		
 		var menu_state = '';
 		var focus_g = 1;		
@@ -83,7 +83,33 @@ session_write_close();
 			if($('#sound_ok').prop("checked"))		
 				$("#sound_" + sound + "_play").click();
 		
-		}	
+		}
+
+		function setDebag(debug)
+		{
+			log_display = debug['log_display'];			
+			tools_log = debug['tools_log'];
+			tools_queue_msg = debug['tools_queue_msg'];
+			tools_queue_atom = debug['tools_queue_atom'];
+			tools_con_msgs = debug['tools_con_msgs'];
+			
+			if(tools_log)
+			{
+				$('#log_box').css('display', 'block');
+				$('#demons_state').css('display', 'block');
+			}		
+				
+				
+			if(tools_queue_msg)
+				$('#queue_box').css({'left': '0', 'top': '500'});
+
+			if(tools_queue_atom)
+				$('#queue_atoms_box').css({'left': '0', 'top': '600'});
+
+			if(tools_con_msgs)
+				$('#data_list_msg_abs_box').css({'left': '230', 'top': '70'});				
+		
+		}
 		
 		
 		function dump(arr,level) {
@@ -3123,11 +3149,17 @@ session_write_close();
 				var user_password = $('#s_chat_new_user_password').val();
 				var user_password2 = $('#s_chat_new2_user_password').val();
 				var sound_ok_val;
+				var log_on_val;
 				
 				if($('#sound_ok').prop("checked"))
 					sound_ok_val = 1;
 				else 
 					sound_ok_val = 0;
+					
+				if($('#log_on').prop("checked"))
+					log_on_val = 1;
+				else 
+					log_on_val = 0;					
 				
 				
 				if(user_secret != "" && user_password != "")
@@ -3165,6 +3197,7 @@ session_write_close();
 				send_data['sid'] = sid;
 				send_data['packet_key'] = packet_key;
 				send_data['sound_ok_val'] = sound_ok_val;
+				send_data['log_on_val'] = log_on_val;
 				send_data['user_secret_md5'] = user_secret_md5;
 				send_data['user_password_md5'] = user_password_md5;
 				send_data['key_s_a_5'] = key_s_a_5.toString();//Передадим синхронный ключ для зашифровки длинных данных
@@ -3434,24 +3467,7 @@ session_write_close();
 			});
 		
 		
-			if(tools_log)
-			{
-				$('#log_box').css('display', 'block');
-				$('#demons_state').css('display', 'block');
-			}
-			
-			
-				
-				
-			if(tools_queue_msg)
-				$('#queue_box').css({'left': '0', 'top': '500'});
-
-			if(tools_queue_atom)
-				$('#queue_atoms_box').css({'left': '0', 'top': '600'});
-
-			if(tools_con_msgs)
-				$('#data_list_msg_abs_box').css({'left': '230', 'top': '70'});			
-				
+		
 				
 				
 			//var t_k = hex_md5('hghghhghghghghhhh');
@@ -3527,12 +3543,43 @@ session_write_close();
 						
 							var _packet_key = getDecryptedData_mas['packet_key'];
 							var _sound_on = parseInt(getDecryptedData_mas['sound_on']);
+							var _log_on = parseInt(getDecryptedData_mas['log_on']);
 							var _s_user_block_link = getDecryptedData_mas['user_block_link'];
+						
+							var debug = new Object();
+							
+							if(_log_on == 1)
+							{
+								debug['log_display'] = true;
+								debug['tools_log'] = true;
+								debug['tools_queue_msg'] = true;
+								debug['tools_queue_atom'] = true;
+								debug['tools_con_msgs'] = false;
+							
+							}
+							else
+							{
+								debug['log_display'] = false;
+								debug['tools_log'] = false;
+								debug['tools_queue_msg'] = false;
+								debug['tools_queue_atom'] = false;
+								debug['tools_con_msgs'] = false;							
+							
+							}
+							
+							setDebag(debug);
+						
 						
 							if(packet_key == _packet_key)
 							{	
 							
 								//Вставка настроек
+								
+								if(_log_on == 1)
+									$('#log_on').prop("checked", "checked");
+								else
+									$('#log_on').prop("checked", "");								
+								
 								
 								if(_sound_on == 1)
 									$('#sound_ok').prop("checked", "checked");
@@ -5209,6 +5256,17 @@ session_write_close();
 
 										</td>
 										</tr>
+										<tr>
+										<td width="20px">
+
+											<input type="checkbox" name="log_on" id="log_on">
+										
+										</td>
+										<td>
+											Log (Для разработчиков)
+
+										</td>
+										</tr>										
 										</table>	
 									<div>		
 									
