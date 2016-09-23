@@ -1708,12 +1708,10 @@ session_write_close();
 		
 		
 		function queueInretval()
-		{
-			log('queueInretval...');//loger...	
+		{			
 			
 			if(focus_g == 1)
-			{
-				log('focus_g 1...');//loger...	
+			{			
 				
 				$('.msg_clss_to[state="to_look_1"]').each(function(){
 				
