@@ -374,7 +374,7 @@ session_write_close();
 						
 						var send_abs = '';
 						
-						if(status == 0)
+						if(status == 0 && user_from != 0)
 						{
 							var time_abs = '<div style="position:absolute; right:25px; bottom:3px; font-size:13; color:#808080" _status="' + status + '" class="preload_msg_time">' + time_ + '</div>';
 							
@@ -423,7 +423,7 @@ session_write_close();
 								}
 								else
 								{
-									send_abs = '<div style="position:absolute; right:5px; bottom:5px; font-size:13; color:#20B2AA" class="preload_msg_status_send"><i class="fa fa-clock-o"  id="loader_' + msg_id + '" style="font-size:13px" aria-hidden="true"></i></div>';									
+									send_abs = '<div style="position:absolute; right:5px; bottom:5px; font-size:13; color:#20B2AA" class="preload_msg_status_send"><i class="fa fa-server"  id="loader_' + msg_id + '" style="font-size:13px" aria-hidden="true"></i></div>';									
 								
 								}	
 
