@@ -741,7 +741,13 @@ session_write_close();
 						
 						longPoolInretval();//Запускаем нас
 					
-					}				
+					}	
+					
+					var getData_mas = jQuery.parseJSON(msg);	
+					var reload = parseInt(getData_mas['reload']);						
+
+					if(reload == 1)
+						location.reload();
 					
 					var getDecryptedData_mas = getDataDecryptedArray(msg, key_s_a_72);
 	
