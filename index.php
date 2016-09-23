@@ -985,7 +985,7 @@ session_write_close();
 														
 														var event_need = true;														
 																	
-														var height_set = $('.abs_msg_con[user_id="' + _user_from_id + '"]').height() + 500;
+														var height_set = $('.abs_msg_con[user_id="' + _user_from_id + '"]').height() + 50000;
 														
 														$('.abs_msg_con[user_id="' + _user_from_id + '"]').animate({ scrollTop: height_set }, 200);
 														
@@ -4479,7 +4479,7 @@ session_write_close();
 				
 				$('.abs_msg_con[user_id="' + user_id + '"]', data_list_msg).append(msg_box);
 				
-				var height_set = $('.abs_msg_con[user_id="' + user_id + '"]').height() + 500;
+				var height_set = $('.abs_msg_con[user_id="' + user_id + '"]').height() + 50000;
 				
 				$('.abs_msg_con[user_id="' + user_id + '"]').animate({ scrollTop: height_set }, 1000);				
 			
@@ -4671,7 +4671,7 @@ session_write_close();
 											
 											$('#data_text_msg').val('');								
 										
-											var height_set = $('.abs_msg_con[user_id="' + user_id_act + '"]').height() + 500;
+											var height_set = $('.abs_msg_con[user_id="' + user_id_act + '"]').height() + 50000;
 										
 											$('.abs_msg_con[user_id="' + user_id_act + '"]').animate({ scrollTop: height_set }, 200);
 											
@@ -4805,7 +4805,7 @@ session_write_close();
 				else
 					$('#crypto_line_state').html('<i class="fa fa-paper-plane crypto_line_state_el" style="font-size:13px; color:#c0c0c0; cursor:pointer" crypto_line="0" aria-hidden="true"></i>');
 				
-				var height_set = $('.abs_msg_con[user_id="' + user_id + '"]').height() + 500;
+				var height_set = $('.abs_msg_con[user_id="' + user_id + '"]').height() + 50000;
 				
 				$('.abs_msg_con[user_id="' + user_id + '"]').animate({ scrollTop: height_set }, 1000);
 				
