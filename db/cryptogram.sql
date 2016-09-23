@@ -113,7 +113,8 @@ CREATE TABLE `z_user_friends` (
   `user_id` int(10) NOT NULL,
   `user_ch_id` int(10) NOT NULL,
   `block` int(1) NOT NULL,
-  `look` int(1) NOT NULL
+  `look` int(1) NOT NULL,
+  `pencil` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
