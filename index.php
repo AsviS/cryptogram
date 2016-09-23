@@ -4796,6 +4796,14 @@ session_write_close();
 				
 				
 			  }
+			  
+			  if (e.keyCode == 13) {
+				
+				msgSend();
+				
+				
+			  }		
+			  
 			});	
 			
 			$('#msg_send').click(function(){
