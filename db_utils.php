@@ -1,5 +1,83 @@
 <?php
 
+function delMsg($packet_key, $user_id)
+{
+	global $text;
+	
+	$return_id = 0;
+	
+	$select = 'select id from z_msgs where packet_key="' . mysql_real_escape_string($packet_key) . '" and user_from="' . mysql_real_escape_string($user_id) . '"';
+	$text->my_sql_query = $select;
+	$text->my_sql_execute();
+	$res = mysql_fetch_object($text->my_sql_res);
+	$id = $res->id;	
+	
+	if($id > 0)
+	{
+		$select = 'delete from z_atoms where parent_msg_id="' . mysql_real_escape_string($id) . '"';
+		$text->my_sql_query = $select;
+		$text->my_sql_execute();	
+		
+		$select = 'delete from z_msgs where id="' . mysql_real_escape_string($id) . '"';
+		$text->my_sql_query = $select;
+		$text->my_sql_execute();	
+
+		$return_id = $id;
+	
+	}
+		
+	$select = 'select id from z_msgs where packet_key="' . mysql_real_escape_string($packet_key) . '" and user_to="' . mysql_real_escape_string($user_id) . '"';
+	$text->my_sql_query = $select;
+	$text->my_sql_execute();
+	$res = mysql_fetch_object($text->my_sql_res);
+	$id = $res->id;		
+	
+	if($id > 0)
+	{
+		$select = 'delete from z_atoms where parent_msg_id="' . mysql_real_escape_string($id) . '"';
+		$text->my_sql_query = $select;
+		$text->my_sql_execute();	
+		
+		$select = 'delete from z_msgs where id="' . mysql_real_escape_string($id) . '"';
+		$text->my_sql_query = $select;
+		$text->my_sql_execute();	
+
+		$return_id = $id;	
+	
+	}	
+
+	return $return_id;
+
+}
+
+function getMsgEditAccess($packet_key, $user_id)
+{
+	global $text;
+	
+	$access = false;
+	
+	$select = 'select id from z_msgs where packet_key="' . mysql_real_escape_string($packet_key) . '" and user_from="' . mysql_real_escape_string($user_id) . '"';
+	$text->my_sql_query = $select;
+	$text->my_sql_execute();
+	$res = mysql_fetch_object($text->my_sql_res);
+	$id = $res->id;	
+	
+	if($id > 0)
+		$access = true;
+		
+	$select = 'select id from z_msgs where packet_key="' . mysql_real_escape_string($packet_key) . '" and user_to="' . mysql_real_escape_string($user_id) . '"';
+	$text->my_sql_query = $select;
+	$text->my_sql_execute();
+	$res = mysql_fetch_object($text->my_sql_res);
+	$id = $res->id;	
+	
+	if($id > 0)
+		$access = true;		
+		
+	return $access;	
+		
+
+}
 
 function getPencilMas($user_id)
 {

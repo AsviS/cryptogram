@@ -3421,9 +3421,174 @@ session_write_close();
 			
 			function msgEditPanel()
 			{
-			
+				var msg_edit_panel_display = false;
+								
+				var data_list_msg = $('#data_list_msg');
+				
+				$('.msg_clss', data_list_msg).each(function(){
+				
+					var _state = $(this).attr('_state_v');
+					
+					if(_state == 1)
+						msg_edit_panel_display = true;
+				
+				});
+				
+				if(msg_edit_panel_display)
+				{
+					$('#msg_edit_panel').css('display', 'block');
+				}
+				else
+					$('#msg_edit_panel').css('display', 'none');
 			
 			}
+			
+			function msgDel(str_edit)
+			{
+				
+				log('msgDel...');//loger...				
+												
+				var st_packet_id = getNextAutoIncrementId();
+				
+				log('st_packet_id=' + st_packet_id);//loger...		
+
+				var st_packet_key = getUnicKeyPacket(st_packet_id);
+				
+				log('st_packet_key=' + st_packet_key);//loger...		
+							
+				var st_key_s_a_5 = getSKey(st_packet_id);
+								
+				st_key_s_a_5 = 	st_key_s_a_5.toString();		
+								
+				var send_data = new Object();
+				send_data['sid'] = sid;
+				send_data['packet_key'] = st_packet_key;
+				send_data['str_edit'] = str_edit;
+				send_data['key_s_a_5'] = st_key_s_a_5;//Передадим синхронный ключ для зашифровки длинных данных
+				
+				log('st_key_s_a_5 1=' + st_key_s_a_5);//loger...	
+				
+				var st_send_str = JSON.stringify( send_data );
+				
+				st_send_str = st_send_str.replaceAll('+', '@@p@@');//Символ + отдельно кодируем ибо пхп-ная urldecode раскодирует + как пробел	
+				st_send_str = st_send_str.replaceAll(' ', '@@pr@@');	
+				st_send_str = encodeURIComponent(st_send_str);//Кодируем для URL						
+				
+				var st_data_str = st_send_str + '@';	
+
+				if(data_key_crypt != '')
+				{
+					log('data_key_crypt=' + data_key_crypt);//loger...	
+				
+					var encrypted = getEncryptedStr(st_data_str, data_key_crypt);				
+					
+					log('encrypted=' + encrypted);//loger...	
+					
+					//Сейчас у сообщения статус 1, т.к. при создании оно было 0, после отправки метаинформации сервер перевел ее в 1
+					//Мы должны переставить его в статус 2, чтобы сервер начал нам отдавать его атомы
+					
+					$.ajax({						
+					type: 'POST',
+					url: 'msgDel.php',
+					data: 'encrypted=' + encrypted,
+					async: true,
+					success: function(msg){
+					
+						log('msgDel msg=' + msg);//loger...	
+						
+						//console.log(msg);
+						
+						var getDecryptedData_mas = getDataDecryptedArray(msg, st_key_s_a_5);
+
+						var _packet_key = getDecryptedData_mas['packet_key'];						
+										
+						if(st_packet_key == _packet_key && getDecryptedData_mas['del_msgs_str'])
+						{
+							var _del_msgs_str = '' + getDecryptedData_mas['del_msgs_str'].toString();
+							
+							var del_msgs_mas = _del_msgs_str.split(',');
+							var count_del_msgs_mas = del_msgs_mas.length;
+							
+							if(count_del_msgs_mas)
+								if(count_del_msgs_mas > 0)
+								{
+									for(var d = 0; d < count_del_msgs_mas; d++)
+									{
+										if(del_msgs_mas[d] != '')
+											$('.msg_clss[msg_packet_key="' + del_msgs_mas[d] + '"]').remove();
+									
+									}
+								
+								}
+								
+						
+						}
+						else
+							log('packet_key msgDel "' + status + '" ERROR');//loger...	
+
+					
+
+									
+					}});		
+									
+					
+				
+				}
+				else
+					log('Нет ключа - необходимо авторизоваться');//loger...						
+				
+			
+			}
+			
+			$('#msg_del').live('click', function(){
+			
+				var str_edit = '';
+				var msg_edit_panel_display = false;
+				var k = 0;
+				
+				var data_list_msg = $('#data_list_msg');
+				
+				$('.msg_clss', data_list_msg).each(function(){
+				
+					var _state = $(this).attr('_state_v');
+					
+					if(_state == 1)
+					{
+						k++;
+						msg_edit_panel_display = true;
+						
+						str_edit += $(this).attr('msg_packet_key') + ',';
+						
+						
+					}
+						
+				
+				});
+				
+				if(msg_edit_panel_display)
+				{
+					if(k == 1)
+					{
+						if(confirm('Удалить сообщение?'))
+						{
+							msgDel(str_edit);
+						}					
+					
+					}
+					else
+					{
+						if(confirm('Удалить выбранные сообщения?'))
+						{
+							msgDel(str_edit);
+						}						
+					
+					}
+
+
+				}	
+				
+			
+			});
 			
 			$('.msg_clss').live('click', function(){
 			
@@ -3432,12 +3597,12 @@ session_write_close();
 				if(_state == 1)
 				{
 					
-					$(this).attr('_state_v', '1').css('background', '#fff');
+					$(this).attr('_state_v', '0').css('background', '#fff');
 				
 				}
 				else
 				{
-					$(this).attr('_state_v', '0').css('background', '#20B2AA');
+					$(this).attr('_state_v', '1').css('background', '#20B2AA');
 				
 				}
 				
@@ -5330,8 +5495,9 @@ session_write_close();
 										</td>
 									</tr>
 									<tr height="35px">
-										<td valign="top" align="right" style="padding-right:2px">
+										<td valign="top" align="right" style="padding-right:2px; position:relative">
 										
+											<div style="position:absolute; top:10px; left:10px; display:none" id="msg_edit_panel"><i class="fa fa-times" aria-hidden="true" style="color:#ff0000; cursor:pointer" id="msg_del"></i></div>
 											<span class="btn" id="msg_send" style="margin-top:5px">Отправить</span>
 										
 										</td>
