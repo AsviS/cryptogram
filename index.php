@@ -3418,6 +3418,32 @@ session_write_close();
 				
 			
 			}});	
+			
+			function msgEditPanel()
+			{
+			
+			
+			}
+			
+			$('.msg_clss').live('click', function(){
+			
+				var _state = $(this).attr('_state_v');
+				
+				if(_state == 1)
+				{
+					
+					$(this).attr('_state_v', '1').css('background', '#fff');
+				
+				}
+				else
+				{
+					$(this).attr('_state_v', '0').css('background', '#20B2AA');
+				
+				}
+				
+				msgEditPanel();
+			
+			});
 		
 		
 			$('#crypto_line_state').live('click', function(){
