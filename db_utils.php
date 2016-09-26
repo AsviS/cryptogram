@@ -1,5 +1,34 @@
 <?php
 
+
+function getPencilMas($user_id)
+{
+	global $text;
+	
+	$obj_data_mas = array();
+	
+	$time = time();
+
+	$time_pencil_min = $time - 10;//10 секунд назад - уже устаревший карандаш - трем
+	
+	$text->my_sql_query="update z_user_friends set pencil='0' where pencil<'" . mysql_real_escape_string($time_pencil_min) . "'";
+	$text->my_sql_execute();
+	
+	//Остальные выгружаем
+	
+	$select = 'select user_ch_id as user_id from z_user_friends where pencil > 0 and block != "1" and user_id="' . mysql_real_escape_string($user_id) . '" order by id desc';
+	$text->my_sql_query = $select;
+	$text->my_sql_execute();			
+	while ($res = mysql_fetch_object($text->my_sql_res)) 
+	{
+		$obj_data_mas[] = (array) $res;	
+		
+	}	
+	
+	return $obj_data_mas;
+	
+}
+
 function getLogByUserId($user_id)
 {
 	global $text;
@@ -50,7 +79,7 @@ function getUserNotCryptoLineData($user_id, $get_user_id, $from = 0, $count = 10
 	
 	if($user_id > 0 && $get_user_id > 0)
 	{
-		$select = 'select id, packet_key, time, count_atoms, status, type_send, user_from, user_to from z_msgs where crypto_line = "0" and status >= 1 and user_from="' . mysql_real_escape_string($user_id) . '" and user_to="' . mysql_real_escape_string($get_user_id) . '" order by id desc';
+		$select = 'select id, packet_key, time, count_atoms, status, type_send, user_from, user_to from z_msgs where crypto_line = "0" and status >= 0 and user_from="' . mysql_real_escape_string($user_id) . '" and user_to="' . mysql_real_escape_string($get_user_id) . '" order by id desc';
 		$text->my_sql_query = $select;
 		$text->my_sql_execute();			
 		while ($res = mysql_fetch_object($text->my_sql_res)) 

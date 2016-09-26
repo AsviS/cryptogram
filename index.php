@@ -82,9 +82,77 @@ session_write_close();
 		
 		function writer()
 		{
+			if(key_k > 3)
+			{
+				//Отправим событие на сервер
+				
+				var data_list_msg = $('#data_list_msg');
+				
+				var user_id_act = parseInt($('.abs_msg_con', data_list_msg).attr('user_id'));//Активный пользователь (ему мы сейчас отправим сообщение)						
+				
+				if(user_id > 0 && user_id_act > 0)
+				{
+					var st_packet_id = getNextAutoIncrementId();
+				
+					var st_packet_key = getUnicKeyPacket(st_packet_id);					
+									
+					var send_data = new Object();
+					send_data['sid'] = sid;
+					send_data['packet_key'] = st_packet_key;
+					send_data['user_id_act'] = user_id_act;
+					
+					var st_send_str = JSON.stringify( send_data );
+					
+					st_send_str = st_send_str.replaceAll('+', '@@p@@');//Символ + отдельно кодируем ибо пхп-ная urldecode раскодирует + как пробел	
+					st_send_str = st_send_str.replaceAll(' ', '@@pr@@');	
+					st_send_str = encodeURIComponent(st_send_str);//Кодируем для URL						
+					
+					var st_data_str = st_send_str + '@';	
+
+					if(data_key_crypt != '')
+					{
+						log('data_key_crypt=' + data_key_crypt);//loger...	
+					
+						var encrypted = getEncryptedStr(st_data_str, data_key_crypt);				
+						
+						log('encrypted=' + encrypted);//loger...	
+						
+						//Сейчас у сообщения статус 1, т.к. при создании оно было 0, после отправки метаинформации сервер перевел ее в 1
+						//Мы должны переставить его в статус 2, чтобы сервер начал нам отдавать его атомы
+						
+						
+						
+						$.ajax({						
+						type: 'POST',
+						url: 'setPencilEvent.php',
+						data: 'encrypted=' + encrypted,
+						async: true,
+						success: function(msg){
+						
+							log('setPencilEvent msg=' + msg);//loger...				
+
+										
+						}});		
+										
+						
+					
+					}
+					else
+						log('Нет ключа - необходимо авторизоваться');//loger...								
+				
+				}
+				
+				
 			
+					
+
+			
+			
+			}
+			
+			key_k = 0;
 		
-		}		
+		}	
 		
 		function soundGo(sound)
 		{
@@ -789,6 +857,7 @@ session_write_close();
 					var _user_id = getDecryptedData_mas['user_id'];	
 					var list_mas = getDecryptedData_mas['list_mas'];						
 					var while_data = getDecryptedData_mas['while_data'];
+					var pencil_data = getDecryptedData_mas['pencil_data'];
 					var list_add_to_friend = getDecryptedData_mas['list_add_to_friend'];
 
 					var dump_getDecryptedData_mas_str = dump(getDecryptedData_mas);
@@ -899,6 +968,57 @@ session_write_close();
 								
 								$('#data_contacts_box').append(list_str);	
 
+							}
+
+						}		
+					
+					}
+					
+					if(pencil_data)
+					{
+						log(pencil_data, 'obj');//loger...	
+					
+						if(pencil_data.length)
+						{
+							if(pencil_data.length > 0)
+							{	
+								log('pencil_data length=' + pencil_data.length);//loger...
+								
+								for(p = 0; p < pencil_data.length; p++)
+								{
+									var p_user_id = parseInt(pencil_data[p]['user_id']);									
+									
+									var data_list_msg = $('#data_list_msg');
+									
+									var user_id_act = parseInt($('.abs_msg_con', data_list_msg).attr('user_id'));//Активный пользователь (ему мы сейчас отправим сообщение)											
+					
+									if(user_id_act == p_user_id)
+									{
+										log('pencil_data p_user_id=' + p_user_id);//loger...
+																												
+										$('#pencil').css('display', 'block').css('opacity', '1');
+										
+										window.setTimeout(function(){
+										
+																	
+											$('#pencil').animate({
+												opacity: 0
+											  }, 400, function() {
+											
+												$('#pencil').css('display', 'none')
+										
+												
+											  });						
+										
+										}, 4000);										
+									
+									}
+					
+				
+										
+								
+								
+								}
 							}
 
 						}		
@@ -5174,7 +5294,9 @@ session_write_close();
 										</td>
 									</tr>
 									<tr height="55px" style="height:55px; max-height:200px; padding-top:5px">
-										<td valign="bottom">
+										<td valign="bottom" style="position:relative">
+										
+											<div style="position:absolute; top:-20px; left:10px; font-size:13px; color:#808080; display:none" id="pencil"><i class="fa fa-pencil" aria-hidden="true"></i>....</div>
 										
 											<textarea style="width:100%; height:50px; resize:vertical; max-height:200px" placeholder="Текст сообщения" maxlength="500" id="data_text_msg"><?php echo $test_text; ?></textarea>
 											
