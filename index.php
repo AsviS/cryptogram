@@ -3518,6 +3518,8 @@ session_write_close();
 											$('.msg_clss[msg_packet_key="' + del_msgs_mas[d] + '"]').remove();
 									
 									}
+									
+									$('#msg_edit_panel').css('display', 'none');
 								
 								}
 								
