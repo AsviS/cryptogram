@@ -1,10 +1,10 @@
 <?php
 session_start();
-set_time_limit(50);
-ini_set('max_execution_time',50);
+set_time_limit(45);
+ini_set('max_execution_time',45);
 header('Content-Type: text/html; utf-8; charset=UTF-8');
 
-$max_s = 50;
+$max_s = 45;
 
 $start = microtime(true);
 
@@ -58,6 +58,7 @@ if($text && $_sid == $sid)
 	//$return_data['user_id'] = $user_id;
 	
 	$while_data = array();
+	$pencil_data = array();
 	$list_add_to_friend = array();
 	
 	
@@ -128,6 +129,39 @@ if($text && $_sid == $sid)
 				}
 				
 				//================================================================================
+				//================================================================================
+				
+					//Получаем значек карандашика если нам писали последние 10 секунд.. все остальное стираем
+					
+					$pencil_data = getPencilMas($user_id);//Получим всех кто мне пишет сейчас
+					
+					$count_obj_data_mas = count($pencil_data);
+					
+					if($count_obj_data_mas > 0)
+					{			
+						//Отметим эти связи, чтобы повторно их сейчас не передать и не устроить карусель с ajax запросами
+						
+						for($k = 0; $k < $count_obj_data_mas; $k++)
+						{
+						
+							$text->my_sql_query="update z_user_friends set pencil='0' where user_id='" . mysql_real_escape_string($user_id) . "' and user_ch_id='" . mysql_real_escape_string($pencil_data[$k]['user_id']) . "'";
+							$text->my_sql_execute();
+						
+						
+						}
+					
+						$data_isset = true;
+					}
+					
+
+					
+					
+					
+					
+				
+				//================================================================================
+				//================================================================================
+				
 				
 				//Получение непрочитанных несквозных сообщений для мигалки
 				
@@ -328,6 +362,7 @@ if($text && $_sid == $sid)
 		$data_req_mas['list_mas'] = $list_mas;
 		$data_req_mas['packet_id'] = $packet_id;
 		$data_req_mas['while_data'] = $while_data;
+		$data_req_mas['pencil_data'] = $pencil_data;
 		$data_req_mas['list_add_to_friend'] = $list_add_to_friend;
 		
 		$data_req_str = json_encode($data_req_mas);
@@ -350,7 +385,7 @@ if($text && $_sid == $sid)
 		$crypttext = urlencode($crypttext);				
 			
 		$return_data['encrypted_data'] = $crypttext;	
-		$data_req_mas['while_data_test'] = $while_data;	
+		//$data_req_mas['while_data_test'] = $while_data;	
 	
 	
 	
