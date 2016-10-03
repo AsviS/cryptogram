@@ -60,10 +60,30 @@ if($text && $_sid == $sid)
 	$while_data = array();
 	$pencil_data = array();
 	$list_add_to_friend = array();
-	
+	$reload = 0;	
 	
 	if($packet_id > 0 && $user_id > 0 && $key_s_a_72 != '')
 	{		
+	
+		$data_isset = false;
+
+		//=======================================
+		
+		$select = 'select time as _time from z_users where id="' . mysql_real_escape_string($user_id) . '"';
+		$text->my_sql_query = $select;
+		$text->my_sql_execute();
+		$res = mysql_fetch_object($text->my_sql_res);
+		$_time = $res->_time;				
+		
+		if($_time == 0)
+		{
+			$reload = 1;			
+
+		}
+		
+			
+		
+		//=======================================	
 	
 		//============================================================
 		//============================================================	
@@ -78,7 +98,6 @@ if($text && $_sid == $sid)
 			while($while)
 			{
 			
-				$data_isset = false;
 
 				
 				//Смотрим - нет ли для нас чего...
@@ -352,17 +371,26 @@ if($text && $_sid == $sid)
 		//============================================================	
 	
 		
-		setOnline($user_id);	
+		//setOnline($user_id);	
 	
 		$data_req_mas = array();
 		
 		$list_mas = getListFriendsByUserId($user_id);
+		
+		
+		if($reload == 1)
+		{
+			$text->my_sql_query="update z_users set sid='', public_key='' where id= '" . $user_id . "'";
+			$text->my_sql_execute();			
+		
+		}
 		
 		$data_req_mas['user_id'] = $user_id;
 		$data_req_mas['list_mas'] = $list_mas;
 		$data_req_mas['packet_id'] = $packet_id;
 		$data_req_mas['while_data'] = $while_data;
 		$data_req_mas['pencil_data'] = $pencil_data;
+		$data_req_mas['reload'] = $reload;
 		$data_req_mas['list_add_to_friend'] = $list_add_to_friend;
 		
 		$data_req_str = json_encode($data_req_mas);

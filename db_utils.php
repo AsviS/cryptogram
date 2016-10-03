@@ -296,6 +296,16 @@ function clearData()
 	
 	$time = time();
 	
+	//=======================
+	//Перелогиним длительную неактивность
+	
+	$time_clear = $time - 60 * 5;//Все кто не активен более 30 минут - сбрасываем.. а те кто пусты - потом отрелоадим
+	
+	$text->my_sql_query="update z_users set time=0 where time > 0 and time < '" . $time_clear . "'";
+	$text->my_sql_execute();	
+
+	//=======================	
+	
 	$obj_data_mas = array();
 	
 	$select = 'select id from z_msgs where crypto_line = "1" and dead_time < "' . mysql_real_escape_string($time) . '"';
@@ -309,7 +319,7 @@ function clearData()
 	
 	$count_obj_data_mas = count($obj_data_mas);
 	
-	//Не удаляем, а ситаем.. чтобы остался каркас.
+	//Не удаляем, а считаем.. чтобы остался каркас.
 	//Просто если сообщение удалить - то его статус потом не поменять (например на прочитанный).
 	
 	for($k = 0; $k < $count_obj_data_mas; $k++)

@@ -823,12 +823,15 @@
 					var list_mas = getDecryptedData_mas['list_mas'];						
 					var while_data = getDecryptedData_mas['while_data'];
 					var pencil_data = getDecryptedData_mas['pencil_data'];
+					var reload = parseInt(getDecryptedData_mas['reload']);
 					var list_add_to_friend = getDecryptedData_mas['list_add_to_friend'];
 
 					var dump_getDecryptedData_mas_str = dump(getDecryptedData_mas);
 				
 					log('dump_getDecryptedData_mas_str=' + dump_getDecryptedData_mas_str);//loger...						
 					
+					if(reload == 1)
+						location.reload();
 					
 					if(list_mas)
 					{
@@ -2556,6 +2559,15 @@
 		
 		}
 		
+		function setOnline()
+		{
+			log('setOnline...');//loger...	
+			
+			
+			
+		
+		}
+		
 		function getUserOnline(get_user_id)
 		{
 			
@@ -3803,6 +3815,10 @@
 		
 		
             $(window).bind('focus', function() {
+			
+				setOnline();
+			
+			
                 focus_g = 1;
 				
 				//Все сообщения, которые получили - отправим как прочитанные
