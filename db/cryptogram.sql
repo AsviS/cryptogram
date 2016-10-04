@@ -86,9 +86,11 @@ CREATE TABLE `z_users` (
   `time` int(11) NOT NULL,
   `about_1` int(1) NOT NULL,
   `sound_on` int(1) NOT NULL DEFAULT '1',
-  `log_on` int(1) NOT NULL DEFAULT '1',
   `user_block_hash` varchar(32) NOT NULL,
-  `block` int(1) NOT NULL
+  `block` int(1) NOT NULL,
+  `log_on` int(1) NOT NULL,
+  `long_time` int(11) NOT NULL,
+  `theme` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -113,8 +115,7 @@ CREATE TABLE `z_user_friends` (
   `user_id` int(10) NOT NULL,
   `user_ch_id` int(10) NOT NULL,
   `block` int(1) NOT NULL,
-  `look` int(1) NOT NULL,
-  `pencil` int(11) NOT NULL
+  `look` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
