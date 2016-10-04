@@ -2563,8 +2563,74 @@
 		{
 			log('setOnline...');//loger...	
 			
+			if(user_id > 0)
+			{
+			
+				var packet_id = getNextAutoIncrementId();
+				
+				log('packet_id=' + packet_id);//loger...		
+
+				var packet_key = getUnicKeyPacket(packet_id);
+				
+				log('packet_key=' + packet_key);//loger...		
+							
+				var key_s_a_5 = getSKey(packet_id);
+								
+				var send_data = new Object();
+				send_data['sid'] = sid;
+				send_data['packet_key'] = packet_key;
+				send_data['set_user_id'] = user_id;
+				send_data['key_s_a_5'] = key_s_a_5.toString();//Передадим синхронный ключ для зашифровки длинных данных
+				
+				log('key_s_a_5 1=' + send_data['key_s_a_5']);//loger...	
+				
+				var send_str = JSON.stringify( send_data );
+				
+				send_str = send_str.replaceAll('+', '@@p@@');//Символ + отдельно кодируем ибо пхп-ная urldecode раскодирует + как пробел	
+				send_str = send_str.replaceAll(' ', '@@pr@@');	
+				send_str = encodeURIComponent(send_str);//Кодируем для URL						
+				
+				var data_str = send_str + '@';	
+
+				if(data_key_crypt != '')
+				{
+					var encrypted = getEncryptedStr(data_str, data_key_crypt);				
+					
+					$.ajax({						
+					type: 'POST',				
+					url: 'setUserOnline.php',
+					data: 'encrypted=' + encrypted,
+					async: true,
+					success: function(msg){
+					
+						log('setUserOnline msg=' + msg);//loger...	
+						
+						var getDecryptedData_mas = getDataDecryptedArray(msg, key_s_a_5);
+
+						var _packet_key = getDecryptedData_mas['packet_key'];
+	
+						
+						if(packet_key == _packet_key)
+						{
+
+						
+						}
+						else
+							log('packet_key setUserOnline ERROR');//loger...	
+
+					
+
+									
+					}});		
+									
+					
+				
+				}
+				else
+					log('Нет ключа - необходимо авторизоваться');//loger...					
 			
 			
+			}			
 		
 		}
 		

@@ -297,12 +297,17 @@ function clearData()
 	$time = time();
 	
 	//=======================
+	
 	//Перелогиним длительную неактивность
 	
-	$time_clear = $time - 60 * 5;//Все кто не активен более 30 минут - сбрасываем.. а те кто пусты - потом отрелоадим
+	$time_null = $time - 60 * 5;//Все кто не активен более 5 минут - сбрасываем.. а те кто пусты - потом отрелоадим
+	$time_clear = $time - 60 * 60;//Все кто не активен более часа вообще чистим нах
 	
-	$text->my_sql_query="update z_users set time=0 where time > 0 and time < '" . $time_clear . "'";
-	$text->my_sql_execute();	
+	$text->my_sql_query="update z_users set time=0 where time > 0 and time < '" . $time_null . "'";
+	$text->my_sql_execute();		
+	
+	$text->my_sql_query="update z_users set sid='', public_key='', time=0 where time > 0 and time < '" . $time_clear . "'";
+	$text->my_sql_execute();		
 
 	//=======================	
 	
