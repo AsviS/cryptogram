@@ -62,8 +62,33 @@ if($text && $_sid == $sid)
 	$list_add_to_friend = array();
 	$reload = 0;	
 	
-	if($packet_id > 0 && $user_id > 0 && $key_s_a_72 != '')
+	$long_state = getLongState($user_id);
+	$time_last_start_long = getLongTime($user_id);//Время последнего старта скрипта
+	
+	
+	
+	if($long_state == '' || $long_state == 'stop')
+		$go_long = true;//Можно запускать - мы никогда еще не запускались или уже отработали
+	else
+	{
+		//Или мы работаем и все ок или мы подвисли и не записали, что мы закончили.. допустим это было давно.. сбросим зависание и разрешим работать
+		
+		$delta_long = time() - $time_last_start_long;
+		$delta_long_max = $max_s + 60 * 2; //Две минутки дадим на отвисание
+		
+		if($delta_long > $delta_long_max)
+		{
+			$go_long = true;//Да, мы там гдет подвисли, но сейчас должно быть отпустило
+		}
+		else		
+			$go_long = false;//Еще что-то происходит.. скорее всего play =)
+	}
+		
+	
+	if($packet_id > 0 && $user_id > 0 && $key_s_a_72 != '' && $go_long)
 	{		
+		setLongState($user_id, 'play');//Укажем, что мы работаем
+		setLongTime($user_id);//Установим время начала работы
 	
 		$data_isset = false;
 
@@ -415,7 +440,7 @@ if($text && $_sid == $sid)
 		$return_data['encrypted_data'] = $crypttext;	
 		//$data_req_mas['while_data_test'] = $while_data;	
 	
-	
+		setLongState($user_id, 'stop');
 	
 	}
 	else

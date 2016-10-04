@@ -1,5 +1,45 @@
 <?php
 
+function setLongTime($user_id)
+{
+	global $text;
+	
+	$text->my_sql_query="update z_users set long_time='" . time() . "' where id = '" . mysql_real_escape_string($user_id) . "'";
+	$text->my_sql_execute();	
+}
+
+function getLongTime($user_id)
+{
+	global $text;
+	
+	$select = 'select long_time from z_users where id="' . mysql_real_escape_string($user_id) . '"';
+	$text->my_sql_query = $select;
+	$text->my_sql_execute();
+	$res = mysql_fetch_object($text->my_sql_res);
+	return $res->long_time;		
+
+}
+
+function setLongState($user_id, $state)
+{
+	global $text;
+	
+	$text->my_sql_query="update z_users set long_state='" . mysql_real_escape_string($state) . "' where id = '" . mysql_real_escape_string($user_id) . "'";
+	$text->my_sql_execute();	
+}
+
+function getLongState($user_id)
+{
+	global $text;
+	
+	$select = 'select long_state from z_users where id="' . mysql_real_escape_string($user_id) . '"';
+	$text->my_sql_query = $select;
+	$text->my_sql_execute();
+	$res = mysql_fetch_object($text->my_sql_res);
+	return $res->long_state;		
+
+}
+
 function delMsg($packet_key, $user_id)
 {
 	global $text;
