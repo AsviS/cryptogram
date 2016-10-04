@@ -90,6 +90,7 @@ CREATE TABLE `z_users` (
   `block` int(1) NOT NULL,
   `log_on` int(1) NOT NULL,
   `long_time` int(11) NOT NULL,
+  `long_state` varchar(10) NOT NULL,
   `theme` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
