@@ -9,7 +9,7 @@ $sid = session_id();//for php5
 
 $packet_key = $_POST['packet_key'];
 $pubkeyA_2 = $_POST['pubkeyA_2'];
-$user_name = $_POST['user_name'];
+$user_name_md5 = $_POST['user_name_md5'];
 $word_secret_md5 = $_POST['word_secret_md5'];
 $user_password_md5 = $_POST['user_password_md5'];
 $_sid = $_POST['sid'];
@@ -23,7 +23,7 @@ $return_data['encrypted_data'] = getEncryptedDataError($packet_key, $sid);
 
 require_once(realpath(__DIR__) . '/db_utils.php');
 
-if($text && $_sid == $sid && $user_name != "" && $word_secret_md5 != "")
+if($text && $_sid == $sid && $user_name_md5 != "" && $word_secret_md5 != "")
 {
 	//Легкая проверка на sid пройдена
 	
@@ -43,7 +43,7 @@ if($text && $_sid == $sid && $user_name != "" && $word_secret_md5 != "")
 	
 	for($k = 0; $k < $count_obj_data_mas; $k++)
 	{						
-		if($user_name == $obj_data_mas[$k]['user_name'])
+		if($user_name_md5 == md5($obj_data_mas[$k]['user_name']))
 		{
 			//Мы нашли нашего юзера	
 			

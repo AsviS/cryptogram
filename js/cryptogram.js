@@ -4584,12 +4584,12 @@
 						if(user_name_length >= 4 && user_name_length < 10)
 						{
 							var word_secret_md5 = hex_md5(word_secret.toString());	
-
+							var user_name_md5 = hex_md5(user_name.toString());
 							
 							$.ajax({						
 							type: 'POST',
 							url: 'addNewUser.php',
-							data: 'pubkeyA_2=' + pubkeyA_2 + '&packet_key=' + packet_key + '&user_name=' + user_name + '&word_secret_md5=' + word_secret_md5 + '&sid=' + sid,
+							data: 'pubkeyA_2=' + pubkeyA_2 + '&packet_key=' + packet_key + '&user_name_md5=' + user_name_md5 + '&word_secret_md5=' + word_secret_md5 + '&sid=' + sid,
 							async: true,
 							success: function(msg){
 							
