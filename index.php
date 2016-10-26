@@ -379,7 +379,7 @@ session_write_close();
 										
 										<div style="margin-top:0px" align="center">
 										
-											<a href="http://криптограм.впрограмме.рф"><img src="http://криптограм.впрограмме.рф/crypto/images/logos/crypt-logo-8.gif" width="200px" ></a>
+											<a href="http://криптограм.впрограмме.рф" target="_blank"><img src="http://криптограм.впрограмме.рф/crypto/images/logos/crypt-logo-8.gif" width="200px" ></a>
 										
 										</div>
 										
